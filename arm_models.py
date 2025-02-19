@@ -445,14 +445,10 @@ class ScaraRobot:
         self.points = [None] * self.num_points
 
         # Transformation matrices (DH parameters and resulting transformation)
-        self.DH = np.zeros((5, 4))  # Denavit-Hartenberg parameters (theta, d, a, alpha)
-        self.T = np.zeros((self.num_dof, 4, 4))  # Transformation matrices
 
         ########################################
 
         # insert your additional code here
-        self.DH = np.matrix([[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]])
-        self.T = self.DH[0:2, 0:2]
 
         ########################################
 
@@ -465,9 +461,6 @@ class ScaraRobot:
             radians (bool): Whether the input angles are in radians (default is False).
         """
         ########################################
-
-        sigma_1 = sin(theta[0] - theta[1] + theta[2] - theta[3])
-        sigma_2 = sin(theta[0])
 
         ########################################
 
@@ -587,12 +580,13 @@ class FiveDOFRobot:
         self.points = [None] * (self.num_dof + 1)
 
         # Denavit-Hartenberg parameters and transformation matrices
-        self.DH = np.zeros((5, 4))
-        self.T = np.zeros((self.num_dof, 4, 4))
+
+        self.DH = np.matrix(
+            [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+        )  # Denavit-Hartenberg parameters (theta, d, a, alpha)
+        self.T = self.DH[0:2, 0:2]  # Transformation matrices
 
         ########################################
-
-        # insert your additional code here
 
         ########################################
 
@@ -606,12 +600,79 @@ class FiveDOFRobot:
         """
         ########################################
 
-        # insert your code here
+        H_01 = np.matrix(
+            [
+                [cos(theta[0]), 0, -sin(theta[0]), 0],
+                [sin(theta[0]), 0, cos(theta[0]), 0],
+                [0, -1, 0, self.l1],
+                [0, 0, 0, 1],
+            ]
+        )
+        H_12 = np.matrix(
+            [
+                [
+                    cos(theta[1]),
+                    sin(theta[1]),
+                    0,
+                    self.l2 * cos(theta[1]),
+                ],
+                [
+                    sin(theta[1]),
+                    -cos(theta[1]),
+                    0,
+                    self.l2 * sin(theta[1]),
+                ],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1],
+            ]
+        )
+        H_23 = np.matrix(
+            [
+                [cos(theta[2]), sin(theta[2]), 0, 0],
+                [sin(theta[2]), -cos(theta[2]), 0, 0],
+                [0, 0, 1, self.l3],
+                [0, 0, 0, 1],
+            ]
+        )
+        H_34 = np.matrix(
+            [
+                [cos(theta[3] + (PI / 2)), 0, sin(theta[3] + PI / 2), 0],
+                [sin(theta[3] + PI / 2), 0, -cos(theta[3] + PI / 2), 0],
+                [0, 1, 0, 0],
+                [0, 0, 0, 1],
+            ]
+        )
+        H_45 = np.matrix(
+            [
+                [cos(theta[4]), -sin(theta[4]), 0, 0],
+                [sin(theta[4]), cos(theta[4]), 0, 0],
+                [0, 0, 1, self.l4 + self.l5],
+                [0, 0, 0, 1],
+            ]
+        )
+
+        self.DH = np.matmul(
+            np.matmul(np.matmul(np.matmul(H_01, H_12), H_23), H_34),
+            H_45,
+        )
+        # Denavit-Hartenberg parameters (theta, d, a, alpha)
+        self.T = self.DH[0:2, 0:2]  # Transformation matrices
 
         ########################################
 
         # Calculate robot points (positions of joints)
         self.calc_robot_points()
+
+    def jacobian(self, theta: list = None):
+        """
+        blah blah
+
+
+        """
+        if theta is None:
+            theta = self.theta
+
+        return np.array[[]]
 
     def calc_inverse_kinematics(self, EE: EndEffector, soln=0):
         """
