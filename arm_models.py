@@ -466,7 +466,8 @@ class ScaraRobot:
         """
         ########################################
 
-        # insert your code here
+        sigma_1 = sin(theta[0] - theta[1] + theta[2] - theta[3])
+        sigma_2 = sin(theta[0])
 
         ########################################
 
