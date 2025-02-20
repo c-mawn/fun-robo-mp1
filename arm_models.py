@@ -581,10 +581,16 @@ class FiveDOFRobot:
 
         # Denavit-Hartenberg parameters and transformation matrices
 
-        self.DH = np.matrix(
+        self.H05 = np.matrix(
             [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
         )  # Denavit-Hartenberg parameters (theta, d, a, alpha)
-        self.T = self.DH[0:2, 0:2]  # Transformation matrices
+        self.T = self.H05[0:2, 0:2]  # Transformation matrices
+
+        self.H_01 = np.empty(4, 4)
+        self.H_12 = np.empty(4, 4)
+        self.H_23 = np.empty(4, 4)
+        self.H_34 = np.empty(4, 4)
+        self.H_45 = np.empty(4, 4)
 
         ########################################
 
@@ -600,7 +606,7 @@ class FiveDOFRobot:
         """
         ########################################
 
-        H_01 = np.matrix(
+        self.H_01 = np.matrix(
             [
                 [cos(theta[0]), 0, -sin(theta[0]), 0],
                 [sin(theta[0]), 0, cos(theta[0]), 0],
@@ -608,7 +614,7 @@ class FiveDOFRobot:
                 [0, 0, 0, 1],
             ]
         )
-        H_12 = np.matrix(
+        self.H_12 = np.matrix(
             [
                 [
                     cos(theta[1]),
@@ -626,7 +632,7 @@ class FiveDOFRobot:
                 [0, 0, 0, 1],
             ]
         )
-        H_23 = np.matrix(
+        self.H_23 = np.matrix(
             [
                 [cos(theta[2]), sin(theta[2]), 0, 0],
                 [sin(theta[2]), -cos(theta[2]), 0, 0],
@@ -634,7 +640,7 @@ class FiveDOFRobot:
                 [0, 0, 0, 1],
             ]
         )
-        H_34 = np.matrix(
+        self.H_34 = np.matrix(
             [
                 [cos(theta[3] + (PI / 2)), 0, sin(theta[3] + PI / 2), 0],
                 [sin(theta[3] + PI / 2), 0, -cos(theta[3] + PI / 2), 0],
@@ -642,7 +648,7 @@ class FiveDOFRobot:
                 [0, 0, 0, 1],
             ]
         )
-        H_45 = np.matrix(
+        self.H_45 = np.matrix(
             [
                 [cos(theta[4]), -sin(theta[4]), 0, 0],
                 [sin(theta[4]), cos(theta[4]), 0, 0],
@@ -651,19 +657,19 @@ class FiveDOFRobot:
             ]
         )
 
-        self.DH = np.matmul(
-            np.matmul(np.matmul(np.matmul(H_01, H_12), H_23), H_34),
-            H_45,
+        self.H05 = np.matmul(
+            np.matmul(np.matmul(np.matmul(self.H_01, self.H_12), self.H_23), self.H_34),
+            self.H_45,
         )
         # Denavit-Hartenberg parameters (theta, d, a, alpha)
-        self.T = self.DH[0:2, 0:2]  # Transformation matrices
+        self.T = self.H05[0:2, 0:2]  # Transformation matrices
 
         ########################################
 
         # Calculate robot points (positions of joints)
         self.calc_robot_points()
 
-    def jacobian(self, theta: list = None):
+    def jacobian_v(self):
         """
         blah blah
 
@@ -672,7 +678,44 @@ class FiveDOFRobot:
         if theta is None:
             theta = self.theta
 
-        return np.array[[]]
+        # Initialize a 3x5 matrix for jacobian
+        # for first col, take offset vector from H05, and put in first col of matrix
+        # for next col, calc offset to be H05 offset - offset between H01
+        # continue doing this for each offset
+        # combine all collumns into jacobian matrix
+        # return jacobian
+
+        J = np.empty((3, 5))
+        r1 = self.H05[0:3, 3]
+        J[0:3, 0] = r1
+
+        offset_01 = self.H_01[0:3, 3]
+        r2 = r1 - offset_01
+        J[0:3, 1] = r2
+
+        offset_12 = self.H_12[0:3, 3]
+        r3 = r2 - offset_12
+        J[0:3, 2] = r3
+
+        offset_23 = self.H_23[0:3, 3]
+        r4 = r3 - offset_23
+        J[0:3, 3] = r4
+
+        offset_34 = self.H_34[0:3, 3]
+        r5 = r4 - offset_34
+        J[0:3, 4] = r5
+
+        return J
+
+    def inverse_jacobian(self):
+        """
+        Creates the inverse jacobian matrix based on the jacobian.
+
+        Returns:
+            the pseudo inverse of the jacobian matrix
+        """
+        J = self.jacobian_v()
+        return np.linalg.pinv(J)
 
     def calc_inverse_kinematics(self, EE: EndEffector, soln=0):
         """
