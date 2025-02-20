@@ -584,13 +584,15 @@ class FiveDOFRobot:
         self.H05 = np.matrix(
             [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
         )  # Denavit-Hartenberg parameters (theta, d, a, alpha)
-        self.T = self.H05[0:2, 0:2]  # Transformation matrices
+        # Transformation matrices
 
-        self.H_01 = np.empty(4, 4)
-        self.H_12 = np.empty(4, 4)
-        self.H_23 = np.empty(4, 4)
-        self.H_34 = np.empty(4, 4)
-        self.H_45 = np.empty(4, 4)
+        self.H_01 = np.empty((4, 4))
+        self.H_12 = np.empty((4, 4))
+        self.H_23 = np.empty((4, 4))
+        self.H_34 = np.empty((4, 4))
+        self.H_45 = np.empty((4, 4))
+
+        self.T = [self.H_01, self.H_12, self.H_23, self.H_34, self.H_45]
 
         ########################################
 
@@ -662,7 +664,8 @@ class FiveDOFRobot:
             self.H_45,
         )
         # Denavit-Hartenberg parameters (theta, d, a, alpha)
-        self.T = self.H05[0:2, 0:2]  # Transformation matrices
+        self.T = self.H05
+        # Transformation matrices
 
         ########################################
 
