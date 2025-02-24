@@ -593,7 +593,7 @@ class FiveDOFRobot:
         self.H_45 = np.empty((4, 4))
 
         self.T = np.zeros((self.num_dof, 4, 4))
-        print(self.T)
+        # print(self.T)
 
         ########################################
 
@@ -620,9 +620,9 @@ class FiveDOFRobot:
         self.T = [self.H_01, self.H_12, self.H_23, self.H_34, self.H_45]
 
         # Debug prints to verify the transformation matrices
-        print("Transformation Matrices:")
-        for i, T in enumerate(self.T):
-            print(f"T[{i}] =\n{T}")
+        # print("Transformation Matrices:")
+        # for i, T in enumerate(self.T):
+            # print(f"T[{i}] =\n{T}")
 
         # Calculate robot points (positions of joints)
         self.calc_robot_points()
@@ -673,7 +673,7 @@ class FiveDOFRobot:
             the pseudo inverse of the jacobian matrix
         """
         J = self.jacobian_v()
-        print(f"J {J} inv {np.linalg.pinv(J)}")
+        # print(f"J {J} inv {np.linalg.pinv(J)}")
         return np.linalg.pinv(J)
 
     def calc_inverse_kinematics(self, EE: EndEffector, soln=0):
@@ -710,11 +710,8 @@ class FiveDOFRobot:
         ########################################
         # at every time step, inverse inverse jacboan * cartesian
         time_step = 0.05
-        print(f"{self.inverse_jacobian()=}")
-        print(f"{np.array(vel)=}")
-        print(f"{vel=}")
-        q_dot = self.inverse_jacobian() * np.array(vel)
-        print(f"{np.array(q_dot)=}")
+
+        q_dot = self.inverse_jacobian() @ np.array(vel)
         self.theta = self.theta + time_step * np.array(q_dot)
 
         ########################################
@@ -743,7 +740,7 @@ class FiveDOFRobot:
         )  # End-effector axes
         self.T_ee = T_cumulative[-1]  # Final transformation matrix for EE
 
-        print(self.points)
+        # print(self.points)
 
         # Set the end effector (EE) position
         self.ee.x, self.ee.y, self.ee.z = self.points[-1][:3]
