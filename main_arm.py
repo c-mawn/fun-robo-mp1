@@ -254,10 +254,10 @@ class Visualizer:
         Args:
             theta (list): List of joint angles.
         """
-        self.robot.update_plot(angles=theta)
+        # self.robot.update_plot(angles=theta)
         try:
             print(f'{theta=}')
-            # self.robot.update_plot(angles=theta)
+            self.robot.update_plot(angles=theta)
 
             self.canvas.draw()
         except ValueError:

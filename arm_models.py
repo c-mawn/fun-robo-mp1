@@ -592,7 +592,8 @@ class FiveDOFRobot:
         self.H_34 = np.empty((4, 4))
         self.H_45 = np.empty((4, 4))
 
-        self.T = [self.H_01, self.H_12, self.H_23, self.H_34, self.H_45]
+        self.T = np.zeros((self.num_dof, 4, 4))
+        print(self.T)
 
         ########################################
 
@@ -609,7 +610,7 @@ class FiveDOFRobot:
         if not radians:
             theta = [np.deg2rad(angle) for angle in theta]
 
-        self.H_01 = np.matrix(
+        self.H_01 = np.array(
             [
                 [cos(theta[0]), 0, -sin(theta[0]), 0],
                 [sin(theta[0]), 0, cos(theta[0]), 0],
@@ -617,7 +618,7 @@ class FiveDOFRobot:
                 [0, 0, 0, 1],
             ]
         )
-        self.H_12 = np.matrix(
+        self.H_12 = np.array(
             [
                 [cos(theta[1]), sin(theta[1]), 0, self.l2 * cos(theta[1])],
                 [sin(theta[1]), -cos(theta[1]), 0, self.l2 * sin(theta[1])],
@@ -625,7 +626,7 @@ class FiveDOFRobot:
                 [0, 0, 0, 1],
             ]
         )
-        self.H_23 = np.matrix(
+        self.H_23 = np.array(
             [
                 [cos(theta[2]), sin(theta[2]), 0, 0],
                 [sin(theta[2]), -cos(theta[2]), 0, 0],
@@ -633,7 +634,7 @@ class FiveDOFRobot:
                 [0, 0, 0, 1],
             ]
         )
-        self.H_34 = np.matrix(
+        self.H_34 = np.array(
             [
                 [cos(theta[3] + (PI / 2)), 0, sin(theta[3] + PI / 2), 0],
                 [sin(theta[3] + PI / 2), 0, -cos(theta[3] + PI / 2), 0],
@@ -641,7 +642,7 @@ class FiveDOFRobot:
                 [0, 0, 0, 1],
             ]
         )
-        self.H_45 = np.matrix(
+        self.H_45 = np.array(
             [
                 [cos(theta[4]), -sin(theta[4]), 0, 0],
                 [sin(theta[4]), cos(theta[4]), 0, 0],
@@ -768,6 +769,8 @@ class FiveDOFRobot:
         # Calculate EE position and rotation
         self.EE_axes = T_cumulative[-1] @ np.array([0.075, 0.075, 0.075, 1])  # End-effector axes
         self.T_ee = T_cumulative[-1]  # Final transformation matrix for EE
+
+        print(self.points)
 
         # Set the end effector (EE) position
         self.ee.x, self.ee.y, self.ee.z = self.points[-1][:3]
