@@ -610,48 +610,11 @@ class FiveDOFRobot:
         if not radians:
             theta = [np.deg2rad(angle) for angle in theta]
 
-        self.H_01 = np.array(
-            [
-                [cos(theta[0]), 0, -sin(theta[0]), 0],
-                [sin(theta[0]), 0, cos(theta[0]), 0],
-                [0, -1, 0, self.l1],
-                [0, 0, 0, 1],
-            ]
-        )
-        self.H_12 = np.array(
-            [
-                [cos(theta[1]), sin(theta[1]), 0, self.l2 * cos(theta[1])],
-                [sin(theta[1]), -cos(theta[1]), 0, self.l2 * sin(theta[1])],
-                [0, 0, 1, 0],
-                [0, 0, 0, 1],
-            ]
-        )
-        self.H_23 = np.array(
-            [
-                [cos(theta[2]), -sin(theta[2]), 0, 0],
-                [sin(theta[2]), cos(theta[2]), 0, 0],
-                [0, 0, 1, self.l3],
-                [0, 0, 0, 1],
-            ]
-        )
-
-        # self.H_23 = dh_to_matrix([-self.theta[2], 0, self.l3, -(PI / 2)])
-        self.H_34 = np.array(
-            [
-                [cos(theta[3] + (PI / 2)), 0, sin(theta[3] + PI / 2), 0],
-                [sin(theta[3] + PI / 2), 0, -cos(theta[3] + PI / 2), 0],
-                [0, 1, 0, 0],
-                [0, 0, 0, 1],
-            ]
-        )
-        self.H_45 = np.array(
-            [
-                [cos(theta[4]), -sin(theta[4]), 0, 0],
-                [sin(theta[4]), cos(theta[4]), 0, 0],
-                [0, 0, 1, self.l4 + self.l5],
-                [0, 0, 0, 1],
-            ]
-        )
+        self.H_01 = dh_to_matrix([theta[0], self.l1, 0, -PI / 2])
+        self.H_12 = dh_to_matrix([theta[1] - PI / 2, 0, self.l2, PI])
+        self.H_23 = dh_to_matrix([theta[2], 0, self.l3, PI])
+        self.H_34 = dh_to_matrix([theta[3] + PI / 2, 0, 0, PI / 2])
+        self.H_45 = dh_to_matrix([theta[4], self.l4 + self.l5, 0, 0])
 
         self.H05 = self.H_01 @ self.H_12 @ self.H_23 @ self.H_34 @ self.H_45
         self.T = [self.H_01, self.H_12, self.H_23, self.H_34, self.H_45]
