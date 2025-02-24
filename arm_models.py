@@ -635,7 +635,7 @@ class FiveDOFRobot:
             ]
         )
 
-        # self.H_23 = dh_to_matrix([-self.theta[2], 0, self.l3, -(PI / 2)])
+        self.H_23 = dh_to_matrix([self.theta[2], 0, self.l3, PI])
         self.H_34 = np.array(
             [
                 [cos(theta[3] + (PI / 2)), 0, sin(theta[3] + PI / 2), 0],
@@ -670,8 +670,8 @@ class FiveDOFRobot:
 
 
         """
-        if theta is None:
-            theta = self.theta
+        # if theta is None:
+        # theta = self.theta
 
         # Initialize a 3x5 matrix for jacobian
         # for first col, take offset vector from H05, and put in first col of matrix
@@ -745,8 +745,14 @@ class FiveDOFRobot:
             vel: Desired end-effector velocity (3x1 vector).
         """
         ########################################
-
-        # insert your code here
+        # at every time step, inverse inverse jacboan * cartesian
+        time_step = 0.05
+        print(f"{self.inverse_jacobian()=}")
+        print(f"{np.array(vel)=}")
+        print(f"{vel=}")
+        q_dot = self.inverse_jacobian() * np.array(vel)
+        print(f"{np.array(q_dot)=}")
+        self.theta = self.theta + time_step * np.array(q_dot)
 
         ########################################
 
