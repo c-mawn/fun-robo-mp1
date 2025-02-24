@@ -107,7 +107,6 @@ def rotm_to_euler(R) -> tuple:
 
     return roll, pitch, yaw
 
-
 def dh_to_matrix(dh_params: list) -> np.ndarray:
     """Converts Denavit-Hartenberg parameters to a transformation matrix.
 

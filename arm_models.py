@@ -1,7 +1,7 @@
 from math import sin, cos
 import numpy as np
 from matplotlib.figure import Figure
-from helper_fcns.utils import EndEffector, rotm_to_euler
+from helper_fcns.utils import EndEffector, rotm_to_euler, dh_to_matrix
 
 PI = 3.1415926535897932384
 np.set_printoptions(precision=3)
@@ -628,12 +628,14 @@ class FiveDOFRobot:
         )
         self.H_23 = np.array(
             [
-                [cos(theta[2]), sin(theta[2]), 0, 0],
-                [sin(theta[2]), -cos(theta[2]), 0, 0],
+                [cos(theta[2]), -sin(theta[2]), 0, 0],
+                [sin(theta[2]), cos(theta[2]), 0, 0],
                 [0, 0, 1, self.l3],
                 [0, 0, 0, 1],
             ]
         )
+
+        # self.H_23 = dh_to_matrix([-self.theta[2], 0, self.l3, -(PI / 2)])
         self.H_34 = np.array(
             [
                 [cos(theta[3] + (PI / 2)), 0, sin(theta[3] + PI / 2), 0],
@@ -752,7 +754,7 @@ class FiveDOFRobot:
         self.calc_forward_kinematics(self.theta, radians=True)
 
     def calc_robot_points(self):
-        """ Calculates the main arm points using the current joint angles """
+        """Calculates the main arm points using the current joint angles"""
 
         # Initialize points[0] to the base (origin)
         self.points[0] = np.array([0, 0, 0, 1])
@@ -767,18 +769,22 @@ class FiveDOFRobot:
             self.points[i] = T_cumulative[i] @ self.points[0]
 
         # Calculate EE position and rotation
-        self.EE_axes = T_cumulative[-1] @ np.array([0.075, 0.075, 0.075, 1])  # End-effector axes
+        self.EE_axes = T_cumulative[-1] @ np.array(
+            [0.075, 0.075, 0.075, 1]
+        )  # End-effector axes
         self.T_ee = T_cumulative[-1]  # Final transformation matrix for EE
 
         print(self.points)
 
         # Set the end effector (EE) position
         self.ee.x, self.ee.y, self.ee.z = self.points[-1][:3]
-        
+
         # Extract and assign the RPY (roll, pitch, yaw) from the rotation matrix
         rpy = rotm_to_euler(self.T_ee[:3, :3])
         self.ee.rotx, self.ee.roty, self.ee.rotz = rpy[2], rpy[1], rpy[0]
 
         # Calculate the EE axes in space (in the base frame)
         self.EE = [self.ee.x, self.ee.y, self.ee.z]
-        self.EE_axes = np.array([self.T_ee[:3, i] * 0.075 + self.points[-1][:3] for i in range(3)])
+        self.EE_axes = np.array(
+            [self.T_ee[:3, i] * 0.075 + self.points[-1][:3] for i in range(3)]
+        )
