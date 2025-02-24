@@ -254,8 +254,11 @@ class Visualizer:
         Args:
             theta (list): List of joint angles.
         """
+        self.robot.update_plot(angles=theta)
         try:
-            self.robot.update_plot(angles=theta)
+            print(f'{theta=}')
+            # self.robot.update_plot(angles=theta)
+
             self.canvas.draw()
         except ValueError:
             tk.messagebox.showerror("Input Error", "Please enter valid numbers")

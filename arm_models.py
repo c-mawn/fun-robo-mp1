@@ -606,7 +606,8 @@ class FiveDOFRobot:
             theta: List of joint angles (in degrees or radians).
             radians: Boolean flag to indicate if input angles are in radians.
         """
-        ########################################
+        if not radians:
+            theta = [np.deg2rad(angle) for angle in theta]
 
         self.H_01 = np.matrix(
             [
@@ -618,18 +619,8 @@ class FiveDOFRobot:
         )
         self.H_12 = np.matrix(
             [
-                [
-                    cos(theta[1]),
-                    sin(theta[1]),
-                    0,
-                    self.l2 * cos(theta[1]),
-                ],
-                [
-                    sin(theta[1]),
-                    -cos(theta[1]),
-                    0,
-                    self.l2 * sin(theta[1]),
-                ],
+                [cos(theta[1]), sin(theta[1]), 0, self.l2 * cos(theta[1])],
+                [sin(theta[1]), -cos(theta[1]), 0, self.l2 * sin(theta[1])],
                 [0, 0, 1, 0],
                 [0, 0, 0, 1],
             ]
@@ -659,15 +650,13 @@ class FiveDOFRobot:
             ]
         )
 
-        self.H05 = np.matmul(
-            np.matmul(np.matmul(np.matmul(self.H_01, self.H_12), self.H_23), self.H_34),
-            self.H_45,
-        )
-        # Denavit-Hartenberg parameters (theta, d, a, alpha)
-        self.T = self.H05
-        # Transformation matrices
+        self.H05 = self.H_01 @ self.H_12 @ self.H_23 @ self.H_34 @ self.H_45
+        self.T = [self.H_01, self.H_12, self.H_23, self.H_34, self.H_45]
 
-        ########################################
+        # Debug prints to verify the transformation matrices
+        print("Transformation Matrices:")
+        for i, T in enumerate(self.T):
+            print(f"T[{i}] =\n{T}")
 
         # Calculate robot points (positions of joints)
         self.calc_robot_points()
@@ -718,6 +707,7 @@ class FiveDOFRobot:
             the pseudo inverse of the jacobian matrix
         """
         J = self.jacobian_v()
+        print(f"J {J} inv {np.linalg.pinv(J)}")
         return np.linalg.pinv(J)
 
     def calc_inverse_kinematics(self, EE: EndEffector, soln=0):
@@ -761,7 +751,7 @@ class FiveDOFRobot:
         self.calc_forward_kinematics(self.theta, radians=True)
 
     def calc_robot_points(self):
-        """Calculates the main arm points using the current joint angles"""
+        """ Calculates the main arm points using the current joint angles """
 
         # Initialize points[0] to the base (origin)
         self.points[0] = np.array([0, 0, 0, 1])
@@ -776,20 +766,16 @@ class FiveDOFRobot:
             self.points[i] = T_cumulative[i] @ self.points[0]
 
         # Calculate EE position and rotation
-        self.EE_axes = T_cumulative[-1] @ np.array(
-            [0.075, 0.075, 0.075, 1]
-        )  # End-effector axes
+        self.EE_axes = T_cumulative[-1] @ np.array([0.075, 0.075, 0.075, 1])  # End-effector axes
         self.T_ee = T_cumulative[-1]  # Final transformation matrix for EE
 
         # Set the end effector (EE) position
         self.ee.x, self.ee.y, self.ee.z = self.points[-1][:3]
-
+        
         # Extract and assign the RPY (roll, pitch, yaw) from the rotation matrix
         rpy = rotm_to_euler(self.T_ee[:3, :3])
         self.ee.rotx, self.ee.roty, self.ee.rotz = rpy[2], rpy[1], rpy[0]
 
         # Calculate the EE axes in space (in the base frame)
         self.EE = [self.ee.x, self.ee.y, self.ee.z]
-        self.EE_axes = np.array(
-            [self.T_ee[:3, i] * 0.075 + self.points[-1][:3] for i in range(3)]
-        )
+        self.EE_axes = np.array([self.T_ee[:3, i] * 0.075 + self.points[-1][:3] for i in range(3)])
