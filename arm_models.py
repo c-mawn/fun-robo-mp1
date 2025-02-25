@@ -646,7 +646,7 @@ class FiveDOFRobot:
         J = np.empty((3, 5))
 
         t1 = self.H05[0:3, 3]
-        r1 = np.empty((3, 1))
+        r1 = np.array([0, 0, 1])
         j1 = np.cross(r1, t1)
         J[0:3, 0] = j1
 
@@ -655,31 +655,18 @@ class FiveDOFRobot:
         j2 = np.cross(r2, t2)
         J[0:3, 1] = j2
 
-        t3 = self.H05[0:3, 3] - self.H_01[0:3, 3] - self.H_12[0:3, 3]
-        r3 = self.H_01[0:3, 2] + self.H_12[0:3, 2]
+        t3 = self.H05[0:3, 3] - (self.H_01 @ self.H_12)[0:3, 3]
+        r3 = (self.H_01 @ self.H_12)[0:3, 2]
         j3 = np.cross(r3, t3)
         J[0:3, 2] = j3
 
-        t4 = (
-            self.H05[0:3, 3] - self.H_01[0:3, 3] - self.H_12[0:3, 3] - self.H_23[0:3, 3]
-        )
-        r4 = self.H_01[0:3, 2] + self.H_12[0:3, 2] + self.H_23[0:3, 2]
+        t4 = self.H05[0:3, 3] - (self.H_01 @ self.H_12 @ self.H_23)[0:3, 3]
+        r4 = (self.H_01 @ self.H_12 @ self.H_23)[0:3, 2]
         j4 = np.cross(r4, t4)
         J[0:3, 3] = j4
 
-        t5 = (
-            self.H05[0:3, 3]
-            - self.H_01[0:3, 3]
-            - self.H_12[0:3, 3]
-            - self.H_23[0:3, 3]
-            - self.H_34[0:3, 3]
-        )
-        r5 = (
-            self.H_01[0:3, 2]
-            + self.H_12[0:3, 2]
-            + self.H_23[0:3, 2]
-            + self.H_34[0:3, 2]
-        )
+        t5 = self.H05[0:3, 3] - (self.H_01 @ self.H_12 @ self.H_23 @ self.H_34)[0:3, 3]
+        r5 = (self.H_01 @ self.H_12 @ self.H_23 @ self.H_34)[0:3, 2]
         j5 = np.cross(r5, t5)
         J[0:3, 4] = j5
         # offset_12 = self.H_12[0:3, 3]
@@ -740,7 +727,7 @@ class FiveDOFRobot:
         """
         ########################################
         # at every time step, inverse inverse jacboan * cartesian
-        time_step = 0.05
+        time_step = 0.005
 
         # check for singularity, and adjust by nudging angles slightly
         threshold = 0.001
