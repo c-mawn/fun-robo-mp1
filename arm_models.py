@@ -647,13 +647,16 @@ class FiveDOFRobot:
 
 
         t1 = self.H05[0:3, 3]
-        r1 = self.H_01[0:3, 2]
+        r1 = np.empty(3,1)
         j1 = np.cross(r1, t1)
-        J[0:3, 0] = r1
+        J[0:3, 0] = j1
 
-        # offset_01 = self.H_01[0:3, 3]
-        # r2 = r1 - offset_01
-        # J[0:3, 3] = r2
+
+        t2 = self.H05[0:3, 3] - self.H_01[0:3, 3]
+        r2 = self.H_01[0:3, 2]
+        j2 = np.cross(r2, t2)
+        J[0:3, 1] = j2
+
 
         # offset_12 = self.H_12[0:3, 3]
         # r3 = r2 - offset_12
