@@ -622,7 +622,7 @@ class FiveDOFRobot:
         # Debug prints to verify the transformation matrices
         # print("Transformation Matrices:")
         # for i, T in enumerate(self.T):
-            # print(f"T[{i}] =\n{T}")
+        # print(f"T[{i}] =\n{T}")
 
         # Calculate robot points (positions of joints)
         self.calc_robot_points()
@@ -710,6 +710,12 @@ class FiveDOFRobot:
         ########################################
         # at every time step, inverse inverse jacboan * cartesian
         time_step = 0.05
+
+        # check for singularity, and adjust by nudging angles slightly
+        threshold = 0.001
+        if any(abs(val) < threshold for val in self.theta):
+            for i in range(len(self.theta)):
+                self.theta[i] = np.random.uniform(0, 0.1)
 
         q_dot = self.inverse_jacobian() @ np.array(vel)
         self.theta = self.theta + time_step * np.array(q_dot)
