@@ -644,24 +644,28 @@ class FiveDOFRobot:
         # return jacobian
 
         J = np.empty((3, 5))
-        r1 = self.H05[0:3, 3]
-        J[0:3, 4] = r1
 
-        offset_01 = self.H_01[0:3, 3]
-        r2 = r1 - offset_01
-        J[0:3, 3] = r2
 
-        offset_12 = self.H_12[0:3, 3]
-        r3 = r2 - offset_12
-        J[0:3, 2] = r3
+        t1 = self.H05[0:3, 3]
+        r1 = self.H_01[0:3, 2]
+        j1 = np.cross(r1, t1)
+        J[0:3, 0] = r1
 
-        offset_23 = self.H_23[0:3, 3]
-        r4 = r3 - offset_23
-        J[0:3, 1] = r4
+        # offset_01 = self.H_01[0:3, 3]
+        # r2 = r1 - offset_01
+        # J[0:3, 3] = r2
 
-        offset_34 = self.H_34[0:3, 3]
-        r5 = r4 - offset_34
-        J[0:3, 0] = r5
+        # offset_12 = self.H_12[0:3, 3]
+        # r3 = r2 - offset_12
+        # J[0:3, 2] = r3
+
+        # offset_23 = self.H_23[0:3, 3]
+        # r4 = r3 - offset_23
+        # J[0:3, 1] = r4
+
+        # offset_34 = self.H_34[0:3, 3]
+        # r5 = r4 - offset_34
+        # J[0:3, 0] = r5
 
         return J
 
