@@ -692,7 +692,14 @@ class FiveDOFRobot:
         """
         J = self.jacobian_v()
         # print(f"J {J} inv {np.linalg.pinv(J)}")
-        return np.linalg.pinv(J)
+
+        # Calculate pinv of the jacobian
+        lambda_constant = 0.01
+        J_inv = np.transpose(J) @ np.linalg.inv(
+            ((J @ np.transpose(J)) + lambda_constant**2 * np.identity(3))
+        )
+
+        return J_inv
 
     def calc_inverse_kinematics(self, EE: EndEffector, soln=0):
         """
@@ -727,13 +734,13 @@ class FiveDOFRobot:
         """
         ########################################
         # at every time step, inverse inverse jacboan * cartesian
-        time_step = 0.005
+        time_step = 0.01
 
         # check for singularity, and adjust by nudging angles slightly
-        threshold = 0.001
-        if any(abs(val) < threshold for val in self.theta):
-            for i in range(len(self.theta)):
-                self.theta[i] = np.random.uniform(0, 0.1)
+        # threshold = 0.001
+        # if any(abs(val) < threshold for val in self.theta):
+        #     for i in range(len(self.theta)):
+        #         self.theta[i] = np.random.uniform(0, 0.1)
 
         q_dot = self.inverse_jacobian() @ np.array(vel)
         self.theta = self.theta + time_step * np.array(q_dot)
