@@ -8,10 +8,10 @@
 
 
 ## Robot Arm Diagram -- with frames
-![diagram](/assets/funrobo_mp1_diagram.png)
+![diagram](https://previews.dropbox.com/p/thumb/AClgvosO7KlhoOozk9Qn_xUSKtxAOrtYt3xwx_mOTHedk7KsKkvh4Q5kwGPlFhlyq3rxDgmTv4_TMq37P2y7Lxd2t2Rkl7mXSBmxpuF6_4BlUkMg5_Z3xOxHcNsNDSZjWkSJOvByxsxiGFfwSZaOr-rfO4_9YFOe6IZ8DdIUYCrWb1RzHJlXEayAVatDzNCayQWbtQcwx6WY4KJUi9uq5F5i993gYBgJZq39Uynwhcl2d29b7ZNGEfTGfCdDAzAVbAQV9yGmwE3vmzgLRP1Dxt4SSOQR_--ZAtwJxiLkv9nuSHn8rGv7eTCBScrLjhoy7PA/p.png)
 
 ## Derivation of DH Table and Jacobian Matricies
-![math](/assets/funrobo_mp1_math.png)
+![math](https://previews.dropbox.com/p/thumb/AClz1U0DWAqstDzvjYh8L-uTD80hHogjRNi-OYO2GC-8hdtlUDq6gQgG6JhIsyjaTGgW9pfSBScajYSqgXry17FerpqH3U44FFGI5Lgw8AnGfnnzL7Tm8LAFvFJn4CaMtvE04YR9QXdMr-1M-R_Df_GHKj9gIlx1kap6gtDQ1V-fKey68LelNm98KfcjlAJw8aDGnA2m-0UoSVis17Jv_LEvcEAdABAp_K7jGEI4E0h7wWzyJXaSU6MnGupU4CFv-DiJ6jHzLn7WgBCf-SC_MvAXKC4ZSSSda28Xjp56puPL5XjL58MOMwlwkHAI-9wz1uI/p.png)
 
 ## Video Demos
 
