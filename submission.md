@@ -9,10 +9,10 @@
 
 ## Robot Arm Diagram -- with frames
 [diagram](https://www.dropbox.com/scl/fi/qj3w9asxu9amepujsrdbi/funrobo_mp1_diagram.png?rlkey=yy91buuaqyxy2pn6q56p197ck&st=6jyxbsdd&dl=0)
-
+![diagram](/assets/funrobo_mp1_diagram.png)
 ## Derivation of DH Table and Jacobian Matricies
 [math](https://www.dropbox.com/scl/fi/c9phjtv2rnwxzsmpd83a9/funrobo_mp1_math.png?rlkey=ljtr6bcz4tgt2mo99xcepi7fe&st=601i9k6g&dl=0)
-
+![math](/assets/funrobo_mp1_math.png)
 ## Video Demos
 
 ### FPK Visualizer Video
