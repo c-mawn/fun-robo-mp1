@@ -271,3 +271,14 @@ I think the biggest thing I want to learn is how people actually use this in rea
 
 ### Alex
 
+#### What did you learn from this? What did you not know before this assignment?
+
+#### What was the most difficult aspect of the assignment?
+
+#### What was the easiest or most straightforward aspect of the assignment?
+
+#### How long did this assignment take? What took the most time (PC setup? Coding in Python? Exploring the questions?)?
+
+#### What did you learn about arm forward kinematics that we didn't explicitly cover in class?
+
+#### What more would you like to learn about arm forward kinematics?
