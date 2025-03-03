@@ -18,22 +18,22 @@
 ### FPK Visualizer Video
 [FPK Visualizer Video](https://youtu.be/C8_INBxMgc4)
 
-<iframe width="1159" height="756" src="https://www.youtube.com/embed/C8_INBxMgc4" title="Funrobo MP1 -- Forward Position Kinematics Visualizer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 
 ### FVK Visualizer Video
 [FVK Visualizer Video](https://youtu.be/aM-NqXCQ0vk)
 
-<iframe width="1151" height="756" src="https://www.youtube.com/embed/aM-NqXCQ0vk" title="Funrobo MP1 -- Forward Velocity Kinematics Visualizer" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 
 ### Robot Arm Moving in 3 Axes Video
 [Robot Arm Demo (3-axes) Video](https://youtu.be/yc-X9xhSfXw)
 
-<iframe width="1280" height="720" src="https://www.youtube.com/embed/yc-X9xhSfXw" title="Funrobo MP1 -- Robot Arm Demo (moving along 3 axes)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 
 ### Robot Arm Picking up Block Video
 [Robot Arm Demo (picking up blocks) Video](https://www.youtube.com/watch?v=wYRfEQr1miI)
 
-<iframe width="1280" height="756" src="https://www.youtube.com/embed/wYRfEQr1miI" title="Funrobo MP1 -- Robot Arm Demo (picking up block)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 
 (Sorry that last video is sideways)
 
