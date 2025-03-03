@@ -272,13 +272,19 @@ I think the biggest thing I want to learn is how people actually use this in rea
 ### Alex
 
 #### What did you learn from this? What did you not know before this assignment?
+From this project, I got a much better understanding of robot kinematics, as well as how to implement them in MATLAB/Python code. Before this assignment, I had a vague understanding of FPK/FVK from the lectures, but implementing them helped me understand them conceptually and visualize what was actually happening.
 
 #### What was the most difficult aspect of the assignment?
+The most difficult aspect of this assignment for me was creating the DH tables, as it took a while for me to understand what each value was supposed to physically represent.
 
 #### What was the easiest or most straightforward aspect of the assignment?
+The most straightforward part of the assignment was the RRMC, as even though we had issues with our Jacobian matrix, the calculations and step commands around it were pretty simple.
 
 #### How long did this assignment take? What took the most time (PC setup? Coding in Python? Exploring the questions?)?
+This project took around 20 hours. I felt like we spent the most time deriving the DH table in the beginning.
 
 #### What did you learn about arm forward kinematics that we didn't explicitly cover in class?
+While I didn't specifically learn anything new, I had a much better understanding of concepts such as RRMC through my own research in this process rather than what we covered in class.
 
 #### What more would you like to learn about arm forward kinematics?
+I would like to solidify my core understanding of the topic before moving on, but I would like to go more into singularities and how to avoid them.
